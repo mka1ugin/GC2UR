@@ -1,18 +1,13 @@
 import gcodetools as ur
 import visualisation as vis
 
+base_point = "p[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]"  # координаты в системе координат робота, которые будут соответствовать нулевой точке GCode
+angle = 0                                  # угол поворота
+
 gcode_filename = 'gcode.nc'
 urscript_filename = 'script.urscript'
 
-gcode = open(gcode_filename, 'r')
-urscript = open(urscript_filename, 'w')
-urscript.write(ur.print_header())
 
-for line in gcode:
-    script_line = ur.parse_gcode_string(line)
-    if script_line:
-        print(script_line)
-        urscript.write(script_line + '\n')
-
-urscript.close()
+ur.set_transform(base_point, angle)
+ur.convert(gcode_filename, urscript_filename)
 vis.draw_all(urscript_filename)
